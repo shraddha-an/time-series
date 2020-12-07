@@ -75,7 +75,7 @@ predicted_stock_price = pd.DataFrame(predicted_stock_price).reset_index(drop = T
 dataset_test = pd.DataFrame(dataset_test).reset_index(drop = True)
 
 # Visualising the results
-plt.plot(dataset_test, color = 'red', label = 'Real MSFT Stock Price')#.autoscale(axis = 'x',tight = True)
+plt.plot(dataset_test, color = 'red', label = 'Real MSFT Stock Price')
 plt.plot(predicted_stock_price, color = 'blue', label = 'Predicted MSFT Stock Price')
 plt.title('MSFT Stock Price Prediction')
 plt.xlabel('Time')
@@ -84,10 +84,10 @@ plt.legend()
 plt.show()
 
 # RMSE
-accuracy = dict()
+rsme = dict()
 from sklearn.metrics import mean_squared_error as mse
 from math import sqrt
 
 print('\nRMSE: ', sqrt(mse(dataset_test, predicted_stock_price)))
 
-accuracy['2_50'] = sqrt(mse(dataset_test, predicted_stock_price))
+rmse['2_50'] = sqrt(mse(dataset_test, predicted_stock_price))
