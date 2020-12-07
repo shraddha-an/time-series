@@ -17,8 +17,8 @@ ds_train, ds_test = ds[0: -n_obs], ds[-n_obs:]
 
 df_train, df_test = df[0: -n_obs], df[-n_obs:]
 
-# Regression Accuracy Metrics
-accuracy = {}
+# Dictionary to store performance metrics of models
+results = {}
 
 # Evaluating Model Performance with metrics
 def metrics(forecast, actual):
@@ -133,7 +133,7 @@ plt.legend(loc = 'upper center', fontsize = 12, shadow = True, facecolor = '#F2F
 plt.show()
 
 # Performance Metric
-accuracy['ARIMA'] = forecast_accuracy(forecast, df_test.value)
+results['ARIMA'] = metrics(forecast, df_test.value)
 
 # ~~~~~~~~~~~~~~~~~~~~~ Auto ARIMA Forecast ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Building Auto ARIMA model
@@ -178,7 +178,7 @@ plt.title("Final Forecast of MSFT Stock Prices")
 plt.show()
 
 # Performance
-accuracy['Auto ARIMA'] = forecast_accuracy(fc, df_test.value)
+results['Auto ARIMA'] = metrics(fc, df_test.value)
 
 # ========================== Normal regression ================================
 # Linear Rgression Model
@@ -192,9 +192,6 @@ model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
 
-# metrics
-forecast_accuracy(y_pred, y_test)
-
 # Actual vs Predicted Plot
 sb.set_style('darkgrid')
 plt.plot(y_pred, color = '#FF33CC', label = 'Forecasts')
@@ -206,8 +203,8 @@ plt.legend(shadow = True, loc = 'upper center')
 plt.title("Forecast of MSFT Stock Prices")
 plt.show()
 
-# Performance Metric
-accuracy['Linear Regression'] = forecast_accuracy(y_pred, y_test)
+# Performance Metrics
+results['Linear Regression'] = metrics(y_pred, y_test)
 
 # ===========================  VAR  =======================================
 # Vector Autoregression Model
@@ -366,8 +363,8 @@ for i, (col,ax) in enumerate(zip(ds.columns, axes.flatten())):
 
 plt.tight_layout()
 
-# Performance Metric
-accuracy['VAR'] = forecast_accuracy(var_result['Open_forecast'], df_test.value)
+# Performance Metrics
+results['VAR'] = metrics(var_result['Open_forecast'], df_test.value)
 
 # ================================== AR Model ==============================
 from statsmodels.tsa.ar_model import AR
@@ -379,8 +376,8 @@ arm_fitted.k_ar
 
 ar_preds = pd.DataFrame(arm_fitted.predict(start = len(df_train), end = len(df_train) + len(df_test) - 1))
 
-# Performance Metric
-accuracy['AR'] = forecast_accuracy(ar_preds.iloc[:, 0], df_test.value)
+# Performance Metrics
+results['AR'] = metrics(ar_preds.iloc[:, 0], df_test.value)
 
 # Actual vs Predicted Plot
 ar_plot = pd.concat([ar_preds, df_test], axis = 1, ignore_index = True)
